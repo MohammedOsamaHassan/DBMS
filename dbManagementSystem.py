@@ -74,6 +74,7 @@ def insert_data():
     values = input("Enter the values (e.g., 'John', 30): ")                                 # Get corresponding values
     try:
         cursor.execute(f"INSERT INTO {table_name} ({columns_input}) VALUES ({values})")     # Execute insert query
+        dataBase.commit()                                                                  # Commit the transaction
         print(f"Data inserted successfully into table {table_name}.")                       # Print success message
     except mysql.connector.Error as err:                                                    # Handle error if data insertion fails
         print(f"Failed to insert data into table {table_name}. Error: {err}")
@@ -102,6 +103,7 @@ def update_data():
     where_clause = input("Enter the WHERE clause (e.g., id=1): ")                           # Get condition clause
     try:
         cursor.execute(f"UPDATE {table_name} SET {set_clause} WHERE {where_clause}")        # Execute update query
+        dataBase.commit()                                                                   # Commit the transaction
         print(f"Data updated successfully in table {table_name}.")                          # Confirm update
     except mysql.connector.Error as err:                                                    # Handle errors in query execution
         print(f"Failed to update data in table {table_name}. Error: {err}")
@@ -129,6 +131,7 @@ def delete_data():
     where_clause = input("Enter the WHERE clause (e.g., id=1): ")                           # Get condition clause
     try:
         cursor.execute(f"DELETE FROM {table_name} WHERE {where_clause}")                    # Execute delete query
+        dataBase.commit()                                                                   # Commit the transaction
         print(f"Data deleted successfully from table {table_name}.")                        # Confirm deletion
     except mysql.connector.Error as err:                                                    # Handle errors in query execution
         print(f"Failed to delete data from table {table_name}. Error: {err}")
@@ -153,7 +156,7 @@ def select_data():
     columns = [column[0] for column in columns_info]                                         # Extract column names
     print("Columns in the table:", ", ".join(columns))                                       # Display available columns
 
-    columns_input = input("Enter the columns to select (e.g., * or name, age): ")            # Get columns to retrieve
+    columns_input = input(f"Enter the columns to select (e.g., * or {', '.join(columns)}): ")  # Get columns to retrieve
     try:
         cursor.execute(f"SELECT {columns_input} FROM {table_name}")                          # Execute select query
         results = cursor.fetchall()                                                          # Fetch query results
